@@ -91,7 +91,8 @@ public class Persoon {
     public String getInitialen() {
         String result = "";
         for (String s : voornamen) {
-            result += s.substring(0, 1) + ".";
+            s = s.trim();
+            result +=  s.substring(0, 1) + ".";
         }
         return result;
     }
@@ -174,7 +175,7 @@ public class Persoon {
      * @return of ouderlijk gezin kon worden toegevoegd
      */
     boolean setOuders(Gezin ouderlijkGezin) {
-        if (this.ouderlijkGezin == null) {
+        if (this.ouderlijkGezin != null) {
             return false;
         } else {
             this.ouderlijkGezin = ouderlijkGezin;

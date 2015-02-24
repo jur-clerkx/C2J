@@ -1,5 +1,6 @@
 package stamboom.domain;
 
+import com.sun.javafx.UnmodifiableArrayList;
 import java.util.*;
 
 public class Administratie {
@@ -19,8 +20,8 @@ public class Administratie {
     public Administratie() {
         nextGezinsNr = 1;
         nextPersNr = 1;
-        this.personen = null;
-        this.gezinnen = null;
+        this.personen = new ArrayList<Persoon>();
+        this.gezinnen = new ArrayList<Gezin>();
     }
 
     //**********************methoden****************************************
@@ -67,26 +68,32 @@ public class Administratie {
         }
         //vnamen omzetten naar goede vorm voor controle
         String voornamen = "";
+        String[] vnamenNew = new String[vnamen.length];
+        int i = 0;
         for (String s : vnamen) {
-            voornamen += " " + s;
+            s = s.trim();
+            voornamen += s.substring(0, 1).toUpperCase() + ".";
+            vnamenNew[i] = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+            i++;
         }
         voornamen = voornamen.trim();
         //Controleren of persoon al bestaat
         boolean bestaat = false;
         for (Persoon p : this.getPersonen()) {
-            if (p.getAchternaam().equals(anaam)
-                    && p.getTussenvoegsel().equals(tvoegsel)
-                    && p.getGebDat() == gebdat
-                    && p.getGebPlaats().equals(gebplaats)
-                    && p.getVoornamen().equals(voornamen)) {
-                bestaat = true;
+            if (p.getAchternaam().equals(anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase())
+                    && p.getTussenvoegsel().equals(tvoegsel.toLowerCase())
+                    && p.getGebDat().equals(gebdat)
+                    && p.getGebPlaats().equals(gebplaats.substring(0,1).toUpperCase() + gebplaats.substring(1).toLowerCase())
+                    && p.getInitialen().equals(voornamen)) {
+                return null;
             }
         }
-        //Als persoon nog niet bestaat, aanmaken en returnen.
-        if (bestaat) {
-            return null;
+        Persoon p = new Persoon(getNextPersNr(), vnamenNew, anaam, tvoegsel, gebdat, gebplaats, geslacht, ouderlijkGezin);
+        this.personen.add(p);
+        if (ouderlijkGezin != null) {
+            ouderlijkGezin.breidUitMet(p);
         }
-        return new Persoon(getNextPersNr(), vnamen, anaam, tvoegsel, gebdat, gebplaats, geslacht, ouderlijkGezin);
+        return p;
     }
 
     /**
@@ -202,7 +209,7 @@ public class Administratie {
         if (ouder1 == ouder2) {
             return null;
         }
-        if (ouder1.kanTrouwenOp(huwdatum) || ouder2.kanTrouwenOp(huwdatum)) {
+        if (!ouder1.kanTrouwenOp(huwdatum) || !ouder2.kanTrouwenOp(huwdatum)) {
             return null;
         }
         //Controleer of gezin al bestaat, zo ja vul hier dan huwelijksdatum in
@@ -272,7 +279,7 @@ public class Administratie {
      * @return de geregistreerde personen
      */
     public List<Persoon> getPersonen() {
-        return this.personen;
+        return (List<Persoon>) Collections.unmodifiableList(this.personen);
     }
 
     /**
@@ -291,15 +298,15 @@ public class Administratie {
         //Maak controleerbare lijst met voornamen
         String voornamen = "";
         for (String s : vnamen) {
-            voornamen += " " + s.toLowerCase();
+            s = s.trim();
+            voornamen += s.substring(0, 1).toLowerCase() + ".";
         }
         voornamen = voornamen.trim();
         //Controleer of persoon bestaat.
         for (Persoon p : getPersonen()) {
-            if (p.getVoornamen().equals(voornamen.toLowerCase())
-                    && p.getAchternaam().toLowerCase().equals(anaam.toLowerCase())
+            if (p.getInitialen().toLowerCase().equals(voornamen.toLowerCase()) && p.getAchternaam().toLowerCase().equals(anaam.toLowerCase())
                     && p.getTussenvoegsel().toLowerCase().equals(tvoegsel.toLowerCase())
-                    && p.getGebDat() == gebdat
+                    && p.getGebDat().equals(gebdat)
                     && p.getGebPlaats().toLowerCase().equals(gebplaats.toLowerCase())) {
                 return p;
             }

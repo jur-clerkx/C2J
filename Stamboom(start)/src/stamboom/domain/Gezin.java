@@ -168,7 +168,7 @@ public class Gezin {
      * @return false als huwelijk niet mocht worden voltrokken, anders true
      */
     boolean setHuwelijk(Calendar datum) {
-        if (this.huwelijksdatum != null
+        if (this.huwelijksdatum == null
                 && this.scheidingsdatum == null
                 && this.ouder1.kanTrouwenOp(datum)
                 && this.ouder2.kanTrouwenOp(datum)) {
@@ -185,14 +185,14 @@ public class Gezin {
      * (per kind voorafgegaan door ' -')
      */
     public String beschrijving() {
-        String result = "Gezinsnummer: ";
-        result += this.getNr() + "; ";
-        result += this.ouder1.getNaam() + " en " + this.ouder2.getNaam() + "; ";
+        String result = "";
+        result += this.getNr() + " ";
+        result += this.ouder1.getNaam() + " met " + this.ouder2.getNaam() + " ";
         if (huwelijksdatum != null) {
-            result += "Getrouwt op: " + huwelijksdatum.toString() + "; ";
+            result += StringUtilities.datumString(huwelijksdatum);
         }
         if (!this.kinderen.isEmpty()) {
-            result += "Kinderen:";
+            result += "; kinderen:";
             for (Persoon kind : kinderen) {
                 result += " -" + kind.getVoornamen();
             }
@@ -252,7 +252,11 @@ public class Gezin {
      * de ouders hierna gingen/gaan scheiden.
      */
     public boolean isHuwelijkOp(Calendar datum) {
-        return (this.huwelijksdatum.before(datum) || this.huwelijksdatum.equals(datum));
+        if (this.huwelijksdatum == null) {
+            return false;
+        } else {
+            return (this.huwelijksdatum.before(datum) || this.huwelijksdatum.equals(datum));
+        }
     }
 
     /**
@@ -269,6 +273,9 @@ public class Gezin {
      * @return true als dit een gescheiden huwelijk is op datum, anders false
      */
     public boolean heeftGescheidenOudersOp(Calendar datum) {
-        return this.scheidingsdatum == datum;
+        if (this.scheidingsdatum != null) {
+            return this.scheidingsdatum == datum || this.scheidingsdatum.before(datum);
+        }
+        return false;
     }
 }
