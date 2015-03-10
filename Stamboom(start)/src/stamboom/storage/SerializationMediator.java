@@ -5,7 +5,11 @@
 package stamboom.storage;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Properties;
 import stamboom.domain.Administratie;
 
@@ -27,13 +31,17 @@ public class SerializationMediator implements IStorageMediator {
     }
 
     @Override
-    public Administratie load() throws IOException {
+    public Administratie load() throws IOException, ClassNotFoundException {
         if (!isCorrectlyConfigured()) {
             throw new RuntimeException("Serialization mediator isn't initialized correctly.");
         }
-        
-        // todo opgave 2
-        return null;
+        FileInputStream stream = new FileInputStream(props.getProperty("file"));
+        ObjectInputStream in = new ObjectInputStream(stream);
+        Administratie admin = (Administratie) in.readObject();
+        //Sluit streams
+        in.close();
+        stream.close();
+        return admin;
     }
 
     @Override
@@ -41,9 +49,15 @@ public class SerializationMediator implements IStorageMediator {
         if (!isCorrectlyConfigured()) {
             throw new RuntimeException("Serialization mediator isn't initialized correctly.");
         }
-
-        // todo opgave 2
-  
+        //Bestand wegschrijven naar file in properties
+        FileOutputStream stream = new FileOutputStream(props.getProperty("file"));
+        ObjectOutputStream out = new ObjectOutputStream(stream);
+        //wacht tot bestand is weggeschreven
+        out.flush();
+        //Sluit streams
+        out.writeObject(admin);
+        out.close();
+        stream.close();
     }
 
     /**

@@ -1,9 +1,9 @@
 package stamboom.domain;
 
-import com.sun.javafx.UnmodifiableArrayList;
+import java.io.Serializable;
 import java.util.*;
 
-public class Administratie {
+public class Administratie implements Serializable{
 
     //************************datavelden*************************************
     private int nextGezinsNr;
@@ -330,7 +330,7 @@ public class Administratie {
      */
     public Gezin getGezin(int gezinsNr) {
         // aanname: er worden geen gezinnen verwijderd
-        if (gezinnen != null && 1 <= gezinsNr && 1 <= gezinnen.size()) {
+        if (gezinnen != null && 1 <= gezinsNr && gezinsNr <= gezinnen.size()) {
             return gezinnen.get(gezinsNr - 1);
         }
         return null;

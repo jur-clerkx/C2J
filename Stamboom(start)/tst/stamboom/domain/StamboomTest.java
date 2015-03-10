@@ -51,10 +51,13 @@ public class StamboomTest extends TestCase {
 
         assertEquals("afmeting boom onjuist", 8, jaron.afmetingStamboom());
         String stamboomstring = jaron.stamboomAlsString();
-        String[] regels = stamboomstring.split(System.getProperty("line.separator"));
+        String[] regels = stamboomstring.split("!!!");
         assertEquals("aantal regels", 8, regels.length);
         assertEquals("regel 3 onjuist", "    T. de Vries (VROUW) 5-5-1927", regels[2]);
 
-        System.out.println(stamboomstring);
+        //System.out.println(stamboomstring);
+        for(String s : regels){
+            System.out.println(s);
+        }
     }
 }

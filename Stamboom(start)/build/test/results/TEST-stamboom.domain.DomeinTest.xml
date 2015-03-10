@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Jur-Laptop" name="stamboom.domain.DomeinTest" skipped="0" tests="11" time="0.06" timestamp="2015-02-24T09:15:26">
+<testsuite errors="0" failures="0" hostname="Jur-Laptop" name="stamboom.domain.DomeinTest" skipped="0" tests="11" time="0.061" timestamp="2015-03-04T14:53:10">
   <properties>
     <property name="libs.jsp-compiler.javadoc" value="" />
     <property name="netbeans.autoupdate.country" value="NL" />
@@ -68,7 +68,7 @@
     <property name="libs.j2me_common_ant.maven-pom" value="" />
     <property name="libs.spring-webmvc3.0.maven-pom" value="" />
     <property name="libs.swing-layout.maven-pom" value="" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner stamboom.domain.DomeinTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\Jur\Documents\GitHub\C2J\Stamboom(start)\build\test\results\TEST-stamboom.domain.DomeinTest.xml crashfile=C:\Users\Jur\Documents\GitHub\C2J\Stamboom(start)\build\junitvmwatcher7752392489034794396.properties propsfile=C:\Users\Jur\Documents\GitHub\C2J\Stamboom(start)\build\junit7510011989730151692.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner stamboom.domain.DomeinTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\Jur\Documents\GitHub\C2J\Stamboom(start)\build\test\results\TEST-stamboom.domain.DomeinTest.xml crashfile=C:\Users\Jur\Documents\GitHub\C2J\Stamboom(start)\build\junitvmwatcher6606890520410881151.properties propsfile=C:\Users\Jur\Documents\GitHub\C2J\Stamboom(start)\build\junit2868582136819545868.properties" />
     <property name="auxiliary.org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.wrapAnnotations" value="WRAP_NEVER" />
     <property name="build.classes.dir" value="build/classes" />
     <property name="netbeans.accept_license_class" value="org.netbeans.license.AcceptLicense" />
@@ -114,7 +114,7 @@
     <property name="javac.debug" value="true" />
     <property name="javadoc.splitindex" value="true" />
     <property name="file.separator" value="\" />
-    <property name="javac.includesfile.binary" value="C:\Users\Jur\Documents\GitHub\C2J\Stamboom(start)\null1500871453" />
+    <property name="javac.includesfile.binary" value="C:\Users\Jur\Documents\GitHub\C2J\Stamboom(start)\null727883707" />
     <property name="libs.junit_4.maven-pom" value="" />
     <property name="mkdist.disabled" value="false" />
     <property name="javac.test.processorpath" value="C:\Users\Jur\AppData\Roaming\NetBeans\8.0\modules\ext\mysql-connector-java-5.1.23-bin.jar:C:\Program Files\NetBeans 8.0\platform\modules\ext\junit-4.10.jar:C:\Program Files\Java\jdk1.8.0_20\jre/lib/javaws.jar:C:\Program Files\Java\jdk1.8.0_20\jre/lib/deploy.jar:C:\Program Files\Java\jdk1.8.0_20\jre/lib/plugin.jar:build/classes" />
@@ -456,17 +456,17 @@
     <property name="javafx.deploy.installpermanently" value="false" />
     <property name="libs.javaee-web-api-7.0.javadoc" value="C:\Program Files\NetBeans 8.0\enterprise\docs\javaee-doc-api.jar" />
   </properties>
-  <testcase classname="stamboom.domain.DomeinTest" name="testGetNaam" time="0.007" />
-  <testcase classname="stamboom.domain.DomeinTest" name="testSetOuders" time="0.004" />
-  <testcase classname="stamboom.domain.DomeinTest" name="testAddPersoon" time="0.0" />
-  <testcase classname="stamboom.domain.DomeinTest" name="testAddHuwelijk" time="0.003" />
-  <testcase classname="stamboom.domain.DomeinTest" name="testGetPersoonEnPersonen" time="0.004" />
-  <testcase classname="stamboom.domain.DomeinTest" name="testHeeftGescheidenOuders" time="0.0" />
-  <testcase classname="stamboom.domain.DomeinTest" name="testGetPersonenMetAchternaam" time="0.0" />
+  <testcase classname="stamboom.domain.DomeinTest" name="testSetEnIsHuwelijk" time="0.005" />
   <testcase classname="stamboom.domain.DomeinTest" name="testBeschrijvingGezin" time="0.003" />
-  <testcase classname="stamboom.domain.DomeinTest" name="testAddOngehuwdGezin" time="0.0" />
-  <testcase classname="stamboom.domain.DomeinTest" name="testSetEnIsHuwelijk" time="0.004" />
+  <testcase classname="stamboom.domain.DomeinTest" name="testGetPersoonEnPersonen" time="0.0" />
+  <testcase classname="stamboom.domain.DomeinTest" name="testGetPersonenMetAchternaam" time="0.0" />
+  <testcase classname="stamboom.domain.DomeinTest" name="testAddOngehuwdGezin" time="0.001" />
+  <testcase classname="stamboom.domain.DomeinTest" name="testHeeftGescheidenOuders" time="0.0" />
   <testcase classname="stamboom.domain.DomeinTest" name="testScheiding" time="0.0" />
+  <testcase classname="stamboom.domain.DomeinTest" name="testAddPersoon" time="0.002" />
+  <testcase classname="stamboom.domain.DomeinTest" name="testSetOuders" time="0.001" />
+  <testcase classname="stamboom.domain.DomeinTest" name="testGetNaam" time="0.0" />
+  <testcase classname="stamboom.domain.DomeinTest" name="testAddHuwelijk" time="0.002" />
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

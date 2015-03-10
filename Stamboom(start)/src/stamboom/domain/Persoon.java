@@ -1,5 +1,6 @@
 package stamboom.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -7,7 +8,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import stamboom.util.StringUtilities;
 
-public class Persoon {
+public class Persoon implements Serializable {
 
     // ********datavelden**************************************
     private final int nr;
@@ -92,7 +93,7 @@ public class Persoon {
         String result = "";
         for (String s : voornamen) {
             s = s.trim();
-            result +=  s.substring(0, 1) + ".";
+            result += s.substring(0, 1) + ".";
         }
         return result;
     }
@@ -306,8 +307,13 @@ public class Persoon {
      * grootouders etc); de persoon zelf telt ook mee
      */
     public int afmetingStamboom() {
-        //todo opgave 2
-        return -1;
+        if (ouderlijkGezin == null) {
+            return 1;
+        } else if (ouderlijkGezin.getOuder2() == null) {
+            return ouderlijkGezin.getOuder1().afmetingStamboom() + 1;
+        } else {
+            return ouderlijkGezin.getOuder1().afmetingStamboom() + ouderlijkGezin.getOuder2().afmetingStamboom() + 1;
+        }
     }
 
     /**
@@ -323,7 +329,19 @@ public class Persoon {
      * toegewezen;
      */
     void voegJouwStamboomToe(ArrayList<PersoonMetGeneratie> lijst, int g) {
-        //todo opgave 2
+        int nummer = g;
+        //Voeg persoon zelf toe
+        lijst.add(new PersoonMetGeneratie(this.standaardgegevens(), nummer));
+        nummer++;
+        //Roep aan voor ouders
+        if (this.ouderlijkGezin != null) {
+            if(this.ouderlijkGezin.getOuder1() != null){
+                this.ouderlijkGezin.getOuder1().voegJouwStamboomToe(lijst, nummer);
+            }
+            if(this.ouderlijkGezin.getOuder2() != null){
+                this.ouderlijkGezin.getOuder2().voegJouwStamboomToe(lijst, nummer);
+            }
+        }
     }
 
     /**
@@ -350,9 +368,21 @@ public class Persoon {
      * ____J.A. Pieterse (MAN) 4-8-1923<br>
      */
     public String stamboomAlsString() {
-        StringBuilder builder = new StringBuilder();
-        //todo opgave 2
-
-        return builder.toString();
+        String s = "";
+        //Get lijst van stamboom
+        ArrayList<PersoonMetGeneratie> lijst = new ArrayList<>();
+        this.voegJouwStamboomToe(lijst, 0);
+        //Maak string uit lijst
+        for(PersoonMetGeneratie p : lijst){
+            //Voeg 2 spaties per generatie toe
+            for(int i = 0; i < p.getGeneratie(); i++){
+                s += "  ";
+            }
+            //Voeg naam toe
+            s += p.getPersoonsgegevens();
+            //nieuwe regel
+            s += "!!!";
+        }
+        return s;
     }
 }

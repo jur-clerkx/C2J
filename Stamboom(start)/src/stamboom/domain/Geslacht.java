@@ -1,5 +1,7 @@
 package stamboom.domain;
 
+import java.io.Serializable;
 
-public enum Geslacht {	MAN, VROUW }
+
+public enum Geslacht implements Serializable {	MAN, VROUW }
 

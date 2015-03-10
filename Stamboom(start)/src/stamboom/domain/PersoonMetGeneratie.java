@@ -1,6 +1,8 @@
 package stamboom.domain;
 
-public class PersoonMetGeneratie {
+import java.io.Serializable;
+
+public class PersoonMetGeneratie implements Serializable {
     // *********datavelden**************************************************
     private final String persoonsgegevens;
     private final int generatie;

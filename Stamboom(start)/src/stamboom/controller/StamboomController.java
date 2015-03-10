@@ -5,7 +5,11 @@
 package stamboom.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import stamboom.domain.Administratie;
 import stamboom.storage.IStorageMediator;
 
@@ -41,8 +45,12 @@ public class StamboomController {
      * @throws IOException
      */
     public void serialize(File bestand) throws IOException {
-        //todo opgave 2
-        
+        FileOutputStream stream = new FileOutputStream(bestand);
+        ObjectOutputStream out = new ObjectOutputStream(stream);
+        out.writeObject(admin);
+        out.flush();
+        out.close();
+        stream.close();
     }
 
     /**
@@ -51,9 +59,12 @@ public class StamboomController {
      * @param bestand
      * @throws IOException
      */
-    public void deserialize(File bestand) throws IOException {
-        //todo opgave 2
-  
+    public void deserialize(File bestand) throws IOException, ClassNotFoundException {
+        FileInputStream stream = new FileInputStream(bestand);
+        ObjectInputStream in = new ObjectInputStream(stream);
+        admin = (Administratie) in.readObject();
+        in.close();
+        stream.close();
     }
     
     // opgave 4

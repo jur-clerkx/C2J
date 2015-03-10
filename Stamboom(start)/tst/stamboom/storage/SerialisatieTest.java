@@ -60,7 +60,7 @@ public class SerialisatieTest extends TestCase {
         Administratie adm2;
         try {
             controller.deserialize(testOpslag);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(SerialisatieTest.class.getName()).log(Level.SEVERE, null, ex);
             fail();
         }

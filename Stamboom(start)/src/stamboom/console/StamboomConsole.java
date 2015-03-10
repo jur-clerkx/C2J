@@ -41,6 +41,9 @@ public class StamboomConsole {
                 case SHOW_GEZIN:
                     toonGezinsgegevens();
                     break;
+                case SHOW_STAMBOOM:
+                    toonStamboom();
+                    break;
             }
             choice = kiesMenuItem();
         }
@@ -132,7 +135,7 @@ public class StamboomConsole {
         Calendar datum = readDate("datum van scheiding");
         Gezin g = getAdmin().getGezin(gezinsNr);
         if (g != null) {
-            boolean gelukt = getAdmin().setScheiding(g,datum);
+            boolean gelukt = getAdmin().setScheiding(g, datum);
             if (!gelukt) {
                 System.out.println("scheiding niet geaccepteerd");
             }
@@ -160,7 +163,7 @@ public class StamboomConsole {
             List<Gezin> gezinnen = p.getAlsOuderBetrokkenIn();
             System.out.print(p.getNr() + "\t" + p.getNaam() + " " + datumString(p.getGebDat()));
             System.out.print(" gezinnen: ");
-            for (Gezin gezin : gezinnen){
+            for (Gezin gezin : gezinnen) {
                 System.out.print(" " + gezin.getNr());
             }
             System.out.println();
@@ -168,6 +171,15 @@ public class StamboomConsole {
         int invoer = readInt("selecteer gezinsnummer");
         input.nextLine();
         return getAdmin().getGezin(invoer);
+    }
+
+    void toonPersoonsgegevens() {
+        Persoon p = selecteerPersoon();
+        if (p == null) {
+            System.out.println("persoon onbekend");
+        } else {
+            System.out.println(p.beschrijving());
+        }
     }
 
     MenuItem kiesMenuItem() {
@@ -183,15 +195,6 @@ public class StamboomConsole {
         }
         input.nextLine();
         return MenuItem.values()[nr];
-    }
-
-    void toonPersoonsgegevens() {
-        Persoon p = selecteerPersoon();
-        if (p == null) {
-            System.out.println("persoon onbekend");
-        } else {
-            System.out.println(p.beschrijving());
-        }
     }
 
     void toonGezinsgegevens() {
@@ -259,5 +262,18 @@ public class StamboomConsole {
 
         StamboomConsole console = new StamboomConsole(controller);
         //console.startMenu();
+    }
+
+    private void toonStamboom() {
+        Persoon p = this.selecteerPersoon();
+        if (p != null) {
+            String[] lijst = p.stamboomAlsString().split("!!!");
+            for (String s : lijst) {
+                System.out.println(s);
+            }
+        }
+        else{
+            System.out.println("Persoon bestaat niet!");
+        }
     }
 }

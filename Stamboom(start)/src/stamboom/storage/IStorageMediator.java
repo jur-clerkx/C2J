@@ -15,8 +15,9 @@ public interface IStorageMediator {
      * @return administratie is initialized with the data stored at the 
      * configured location
      * @throws IOException
+     * @throws ClassNotFoundException
      */
-    Administratie load() throws IOException;
+    Administratie load() throws IOException,ClassNotFoundException;
     
     /**
      * pre: medium isCorrectlyConfigured()

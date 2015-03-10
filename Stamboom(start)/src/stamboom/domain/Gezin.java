@@ -1,5 +1,6 @@
 package stamboom.domain;
 
+import java.io.Serializable;
 import java.util.*;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -7,7 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import stamboom.util.StringUtilities;
 
-public class Gezin {
+public class Gezin implements Serializable {
 
     // *********datavelden*************************************
     private final int nr;
