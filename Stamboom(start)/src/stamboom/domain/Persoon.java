@@ -1,11 +1,13 @@
 package stamboom.domain;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.GregorianCalendar;
-import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import stamboom.util.StringUtilities;
 
 public class Persoon implements Serializable {
@@ -18,7 +20,8 @@ public class Persoon implements Serializable {
     private final Calendar gebDat;
     private final String gebPlaats;
     private Gezin ouderlijkGezin;
-    private final List<Gezin> alsOuderBetrokkenIn;
+    private ArrayList<Gezin> alsOuderBetrokkenIn;
+    private transient ObservableList<Gezin> alsOuderBetrokkenInObservable;
     private final Geslacht geslacht;
 
     // ********constructoren***********************************
@@ -41,7 +44,8 @@ public class Persoon implements Serializable {
         this.gebPlaats = gebplaats.substring(0, 1).toUpperCase() + gebplaats.substring(1).toLowerCase();
         this.geslacht = g;
         this.ouderlijkGezin = ouderlijkGezin;
-        this.alsOuderBetrokkenIn = new ArrayList<Gezin>();
+        this.alsOuderBetrokkenIn = new ArrayList();
+        this.alsOuderBetrokkenInObservable = FXCollections.observableArrayList(alsOuderBetrokkenIn);
         //Voornamen omzetten
         int i = 0;
         this.voornamen = new String[vnamen.length];
@@ -162,8 +166,8 @@ public class Persoon implements Serializable {
     /**
      * @return de gezinnen waar deze persoon bij betrokken is
      */
-    public List<Gezin> getAlsOuderBetrokkenIn() {
-        return (List<Gezin>) Collections.unmodifiableList(alsOuderBetrokkenIn);
+    public ObservableList<Gezin> getAlsOuderBetrokkenIn() {
+        return FXCollections.unmodifiableObservableList(alsOuderBetrokkenInObservable);
     }
 
     /**
@@ -201,10 +205,10 @@ public class Persoon implements Serializable {
                 sb.append("; 2e ouder: ").append(ouderlijkGezin.getOuder2().getNaam());
             }
         }
-        if (!alsOuderBetrokkenIn.isEmpty()) {
+        if (!alsOuderBetrokkenInObservable.isEmpty()) {
             sb.append("; is ouder in gezin ");
 
-            for (Gezin g : alsOuderBetrokkenIn) {
+            for (Gezin g : alsOuderBetrokkenInObservable) {
                 sb.append(g.getNr()).append(" ");
             }
         }
@@ -220,8 +224,8 @@ public class Persoon implements Serializable {
      *
      */
     void wordtOuderIn(Gezin g) {
-        if (!alsOuderBetrokkenIn.contains(g)) {
-            alsOuderBetrokkenIn.add(g);
+        if (!alsOuderBetrokkenInObservable.contains(g)) {
+            alsOuderBetrokkenInObservable.add(g);
         }
     }
 
@@ -233,7 +237,7 @@ public class Persoon implements Serializable {
      * null
      */
     public Gezin heeftOngehuwdGezinMet(Persoon andereOuder) {
-        for (Gezin g : this.alsOuderBetrokkenIn) {
+        for (Gezin g : this.alsOuderBetrokkenInObservable) {
             if (g.getOuder1() == andereOuder || g.getOuder2() == andereOuder) {
                 if (g.getHuwelijksdatum() == null) {
                     return g;
@@ -249,7 +253,7 @@ public class Persoon implements Serializable {
      * @return true als persoon op datum getrouwd is, anders false
      */
     public boolean isGetrouwdOp(Calendar datum) {
-        for (Gezin gezin : alsOuderBetrokkenIn) {
+        for (Gezin gezin : alsOuderBetrokkenInObservable) {
             if (gezin.heeftGetrouwdeOudersOp(datum)) {
                 return true;
             }
@@ -271,7 +275,7 @@ public class Persoon implements Serializable {
             return false;
         }
 
-        for (Gezin gezin : alsOuderBetrokkenIn) {
+        for (Gezin gezin : alsOuderBetrokkenInObservable) {
             if (gezin.heeftGetrouwdeOudersOp(datum)) {
                 return false;
             } else {
@@ -290,7 +294,7 @@ public class Persoon implements Serializable {
      * @return true als persoon op datum gescheiden is, anders false
      */
     public boolean isGescheidenOp(Calendar datum) {
-        for (Gezin g : alsOuderBetrokkenIn) {
+        for (Gezin g : alsOuderBetrokkenInObservable) {
             if (g.heeftGescheidenOudersOp(datum)) {
                 return true;
             }
@@ -384,5 +388,10 @@ public class Persoon implements Serializable {
             s += "!!!";
         }
         return s;
+    }
+    
+    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException{
+        ois.defaultReadObject();
+        this.alsOuderBetrokkenInObservable = FXCollections.observableArrayList(alsOuderBetrokkenIn);
     }
 }

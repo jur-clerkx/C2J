@@ -1,9 +1,9 @@
 package stamboom.domain;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import stamboom.util.StringUtilities;
@@ -14,7 +14,8 @@ public class Gezin implements Serializable {
     private final int nr;
     private final Persoon ouder1;
     private final Persoon ouder2;
-    private final List<Persoon> kinderen;
+    private List<Persoon> kinderen;
+    private transient ObservableList<Persoon> kinderenObservable;
     /**
      * kan onbekend zijn (dan is het een ongehuwd gezin):
      */
@@ -64,25 +65,26 @@ public class Gezin implements Serializable {
         this.nr = gezinsNr;
         this.ouder1 = ouder1;
         this.ouder2 = ouder2;
-        this.kinderen = new ArrayList<>();
+        kinderen = new ArrayList();
+        this.kinderenObservable = FXCollections.observableList(kinderen);
         this.huwelijksdatum = null;
         this.scheidingsdatum = null;
     }
 
     // ********methoden*****************************************
     /**
-     * @return alle kinderen uit dit gezin
+     * @return alle kinderenObservable uit dit gezin
      */
-    public List<Persoon> getKinderen() {
-        return (List<Persoon>) Collections.unmodifiableList(kinderen);
+    public ObservableList<Persoon> getKinderen() {
+        return FXCollections.unmodifiableObservableList(kinderenObservable);
     }
 
     /**
      *
-     * @return het aantal kinderen in dit gezin
+     * @return het aantal kinderenObservable in dit gezin
      */
     public int aantalKinderen() {
-        return kinderen.size();
+        return kinderenObservable.size();
     }
 
     /**
@@ -181,9 +183,9 @@ public class Gezin implements Serializable {
 
     /**
      * @return het gezinsnummer, gevolgd door de namen van de ouder(s), de
-     * eventueel bekende huwelijksdatum, (als er kinderen zijn) de constante
-     * tekst '; kinderen:', en de voornamen van de kinderen uit deze relatie
-     * (per kind voorafgegaan door ' -')
+ eventueel bekende huwelijksdatum, (als er kinderenObservable zijn) de constante
+ tekst '; kinderenObservable:', en de voornamen van de kinderenObservable uit deze relatie
+ (per kind voorafgegaan door ' -')
      */
     public String beschrijving() {
         String result = "";
@@ -192,9 +194,9 @@ public class Gezin implements Serializable {
         if (huwelijksdatum != null) {
             result += StringUtilities.datumString(huwelijksdatum);
         }
-        if (!this.kinderen.isEmpty()) {
+        if (!this.kinderenObservable.isEmpty()) {
             result += "; kinderen:";
-            for (Persoon kind : kinderen) {
+            for (Persoon kind : kinderenObservable) {
                 result += " -" + kind.getVoornamen();
             }
         }
@@ -208,8 +210,8 @@ public class Gezin implements Serializable {
      * @param kind
      */
     void breidUitMet(Persoon kind) {
-        if (!kinderen.contains(kind) && !this.isFamilieVan(kind)) {
-            kinderen.add(kind);
+        if (!kinderenObservable.contains(kind) && !this.isFamilieVan(kind)) {
+            kinderenObservable.add(kind);
         }
     }
 
@@ -222,7 +224,7 @@ public class Gezin implements Serializable {
     boolean isFamilieVan(Persoon input) {
         if (this.ouder1.getNr() == input.getNr()
                 || (this.ouder2 != null && this.ouder2.getNr() == input.getNr())
-                || kinderen.contains(input)) {
+                || kinderenObservable.contains(input)) {
             return true;
         }
 
@@ -278,5 +280,11 @@ public class Gezin implements Serializable {
             return this.scheidingsdatum == datum || this.scheidingsdatum.before(datum);
         }
         return false;
+    }
+    
+    private void readObject(ObjectInputStream ois)
+            throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        kinderenObservable = FXCollections.observableArrayList(kinderen);
     }
 }

@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" minWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stamboom.gui.StamboomFXController">
+<AnchorPane id="AnchorPane" minWidth="700.0" prefHeight="393.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stamboom.gui.StamboomFXController">
     <children>
         <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
@@ -43,10 +43,13 @@
                                                             </BorderPane.margin>
                                                         </ComboBox>
                                                     </top>
+                                       <center>
+                                          <TextArea fx:id="tfStamBoom" editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                                       </center>
                                                 </BorderPane>
                                                 <AnchorPane>
                                                     <children>
-                                                        <GridPane gridLinesVisible="false" hgap="4.0" vgap="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <GridPane gridLinesVisible="false" hgap="4.0" prefHeight="294.0" prefWidth="429.0" vgap="2.0" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                             <children>
                                                                 <Label alignment="CENTER_RIGHT" graphicTextGap="4.0" prefWidth="-1.0" text="Nr" textAlignment="RIGHT" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0">
                                                                     <GridPane.margin>
@@ -62,7 +65,7 @@
                                                                 <Label alignment="CENTER_RIGHT" graphicTextGap="4.0" prefWidth="-1.0" text="GebPlaats" textAlignment="RIGHT" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x3" GridPane.rowIndex="6" />
                                                                 <Label alignment="CENTER_RIGHT" graphicTextGap="4.0" prefWidth="-1.0" text="Ouderlijk Gezin" textAlignment="RIGHT" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x3" GridPane.rowIndex="7" />
                                                                 <TextField id="tfPersoonNr" fx:id="tfVoornamen" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                                <TextField id="tfPersoonNr" fx:id="tfTusenvoegsel" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                                <TextField id="tfPersoonNr" fx:id="tfTussenvoegsel" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                                 <TextField id="tfPersoonNr" fx:id="tfAchternaam" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                                                 <Label alignment="CENTER_RIGHT" graphicTextGap="4.0" prefWidth="-1.0" text="Betrokken Bij" textAlignment="RIGHT" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x3" GridPane.rowIndex="8" />
                                                                 <ComboBox fx:id="cbOuderlijkGezin" onAction="#setOuders" prefWidth="400.0" promptText="Kies (zo mogelijk) het ouderlijk gezin" GridPane.columnIndex="1" GridPane.rowIndex="7">
@@ -99,6 +102,8 @@
                                                                 <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
                                                             </rowConstraints>
                                                         </GridPane>
+                                          <Button layoutX="68.0" layoutY="298.0" mnemonicParsing="false" onAction="#okPersoonInvoer" text="Ok" />
+                                          <Button layoutX="250.0" layoutY="298.0" mnemonicParsing="false" onAction="#cancelPersoonInvoer" text="Cancel" />
                                                     </children>
                                                 </AnchorPane>
                                             </items>
@@ -156,6 +161,9 @@
                                                                 <RowConstraints maxHeight="46.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
                                                             </rowConstraints>
                                                         </GridPane>
+                                          <ComboBox fx:id="cbSelecteerGezin" layoutX="14.0" layoutY="14.0" onAction="#selectGezin" prefHeight="25.0" prefWidth="234.0" promptText="selecteer gezin om te tonen" />
+                                          <Button layoutX="14.0" layoutY="166.0" mnemonicParsing="false" onAction="#setScheidingsdatum" prefHeight="25.0" prefWidth="144.0" text="setScheiding voor gezin" />
+                                          <Button layoutX="14.0" layoutY="134.0" mnemonicParsing="false" onAction="#setHuwdatum" prefHeight="25.0" prefWidth="144.0" text="setHuwelijk voor gezin" />
                                                     </children>
                                                 </AnchorPane>
                                                 <AnchorPane>

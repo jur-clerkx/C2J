@@ -1,27 +1,35 @@
 package stamboom.domain;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Administratie implements Serializable{
 
     //************************datavelden*************************************
     private int nextGezinsNr;
     private int nextPersNr;
-    private final List<Persoon> personen;
-    private final List<Gezin> gezinnen;
+    private List<Persoon> personen;
+    private List<Gezin> gezinnen;
+    private transient ObservableList<Persoon> observablePersonen;
+    private transient ObservableList<Gezin> observableGezinnen;
 
     //***********************constructoren***********************************
     /**
-     * er wordt een lege administratie aangemaakt. personen en gezinnen die in
-     * de toekomst zullen worden gecreeerd, worden (apart) opvolgend genummerd
-     * vanaf 1
+     * er wordt een lege administratie aangemaakt. observablePersonen en observableGezinnen die in
+ de toekomst zullen worden gecreeerd, worden (apart) opvolgend genummerd
+ vanaf 1
      */
     public Administratie() {
         nextGezinsNr = 1;
         nextPersNr = 1;
-        this.personen = new ArrayList<Persoon>();
-        this.gezinnen = new ArrayList<Gezin>();
+        personen = new ArrayList();
+        gezinnen = new ArrayList();
+        this.observablePersonen = FXCollections.observableList(personen);
+        this.observableGezinnen = FXCollections.observableList(gezinnen);
     }
 
     //**********************methoden****************************************
@@ -89,7 +97,7 @@ public class Administratie implements Serializable{
             }
         }
         Persoon p = new Persoon(getNextPersNr(), vnamenNew, anaam, tvoegsel, gebdat, gebplaats, geslacht, ouderlijkGezin);
-        this.personen.add(p);
+        this.observablePersonen.add(p);
         if (ouderlijkGezin != null) {
             ouderlijkGezin.breidUitMet(p);
         }
@@ -130,7 +138,7 @@ public class Administratie implements Serializable{
 
         Gezin gezin = new Gezin(nextGezinsNr, ouder1, ouder2);
         nextGezinsNr++;
-        gezinnen.add(gezin);
+        observableGezinnen.add(gezin);
 
         ouder1.wordtOuderIn(gezin);
         if (ouder2 != null) {
@@ -230,7 +238,7 @@ public class Administratie implements Serializable{
 
     /**
      *
-     * @return het aantal geregistreerde personen
+     * @return het aantal geregistreerde observablePersonen
      */
     public int aantalGeregistreerdePersonen() {
         return nextPersNr - 1;
@@ -238,7 +246,7 @@ public class Administratie implements Serializable{
 
     /**
      *
-     * @return het aantal geregistreerde gezinnen
+     * @return het aantal geregistreerde observableGezinnen
      */
     public int aantalGeregistreerdeGezinnen() {
         return nextGezinsNr - 1;
@@ -261,8 +269,8 @@ public class Administratie implements Serializable{
 
     /**
      * @param achternaam
-     * @return alle personen met een achternaam gelijk aan de meegegeven
-     * achternaam (ongeacht hoofd- en kleine letters)
+     * @return alle observablePersonen met een achternaam gelijk aan de meegegeven
+ achternaam (ongeacht hoofd- en kleine letters)
      */
     public ArrayList<Persoon> getPersonenMetAchternaam(String achternaam) {
         ArrayList<Persoon> personen = new ArrayList<Persoon>();
@@ -276,10 +284,10 @@ public class Administratie implements Serializable{
 
     /**
      *
-     * @return de geregistreerde personen
+     * @return de geregistreerde observablePersonen
      */
-    public List<Persoon> getPersonen() {
-        return (List<Persoon>) Collections.unmodifiableList(this.personen);
+    public ObservableList<Persoon> getPersonen() {
+        return (ObservableList<Persoon>) FXCollections.unmodifiableObservableList(observablePersonen);
     }
 
     /**
@@ -316,10 +324,10 @@ public class Administratie implements Serializable{
 
     /**
      *
-     * @return de geregistreerde gezinnen
+     * @return de geregistreerde observableGezinnen
      */
-    public List<Gezin> getGezinnen() {
-        return this.gezinnen;
+    public ObservableList<Gezin> getGezinnen() {
+        return FXCollections.unmodifiableObservableList(this.observableGezinnen);
     }
 
     /**
@@ -329,9 +337,9 @@ public class Administratie implements Serializable{
      * geretourneerd
      */
     public Gezin getGezin(int gezinsNr) {
-        // aanname: er worden geen gezinnen verwijderd
-        if (gezinnen != null && 1 <= gezinsNr && gezinsNr <= gezinnen.size()) {
-            return gezinnen.get(gezinsNr - 1);
+        // aanname: er worden geen observableGezinnen verwijderd
+        if (observableGezinnen != null && 1 <= gezinsNr && gezinsNr <= observableGezinnen.size()) {
+            return observableGezinnen.get(gezinsNr - 1);
         }
         return null;
     }
@@ -358,5 +366,12 @@ public class Administratie implements Serializable{
         int result = this.nextPersNr;
         this.nextPersNr++;
         return result;
+    }
+    
+    private void readObject(ObjectInputStream ois)
+            throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        observablePersonen = FXCollections.observableArrayList(personen);
+        observableGezinnen = FXCollections.observableArrayList(gezinnen);
     }
 }
